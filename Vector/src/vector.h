@@ -1,23 +1,25 @@
 // Vector class implementation
 
 #include <algorithm>
-#include <initializer_list>
 
 using namespace std;
 
 class Vector {
     int sz;
+    int space;
     double* elem;
 
 public:
 
-    Vector(const Vector&);
+    Vector(const Vector&); // Constructor by copying 
 
-    Vector(int s);
+    Vector(int s); // Constructor with number of elements
 
     ~Vector() { delete[] elem; } // Destructor to free 
-                                 // the allocated memory
+                    // the allocated memory
     
+//-------------------------------------------------------------------------
+
     int size() const { return sz; } // Size of the vector 
 
     double get(int n) const { return elem[n]; } // To derive certain
@@ -26,13 +28,19 @@ public:
     void set(int n, double v) { elem[n]=v; } // Initialize some element
                                         // of the vector with certain value
 
+//--------------------------------------------------------------------------
+
     Vector& operator=(const Vector&);
 
-    double& operator[] (int n) { return elem[n]; } // return the reference
+    double& operator[] (int n) { return elem[n]; } // for non-cocnstant vector
 
-    double& operator[] (int n); // for non-cocnstant vector
-    
-    double operator[] (int n) const; // For the constant vector
+    const double& operator[] (int n) const { return elem[n]; } 
+                                        // For the constant vector
+//--------------------------------------------------------------------------
+
+    void reserve(int newalloc); // changes the size of the vector
+    //void push_back(double d);
+    //void reserve(int newalloc);
 
 };
 
@@ -62,6 +70,19 @@ Vector& Vector::operator=(const Vector& a)
     elem = p;           // overinitialize th ptr
     sz = a.sz;
     return *this; // returns the reference on itself
+}
+
+void Vector::reserve(int newalloc)
+{
+    if(newalloc <= space) return; // Size never decreases
+    double* p = new double[newalloc];
+    for (int i=0; i<sz; ++i)
+    {
+        p[i] = elem[i]; // copy old elements
+    }
+    delete[] elem;  // free old memory
+    elem = p;
+    space = newalloc;
 }
 
 
