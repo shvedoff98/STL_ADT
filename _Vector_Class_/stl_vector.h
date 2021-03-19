@@ -28,12 +28,20 @@ public:
     double get(int n) const { return elem[n]; } // To derive certain
                                                 //element of the vector
 
+    int capacity() const { return space; }
+
     void set(int n, double v) { elem[n]=v; } // Initialize some element
                                         // of the vector with certain value
 
 //--------------------------------------------------------------------------
 
-    Vector& operator=(const Vector&);
+    Vector& operator=(const Vector&&);  //copying with operator=
+
+    Vector& operator=(const Vector&); //copy, but if size of the initial 
+                                   // vector is less than a.sz then
+                                   // do not allocate extra memory because we
+                                   // do not know what will be done with
+                                   // this vector
 
     double& operator[] (int n) { return elem[n]; } // for non-cocnstant vector
 
@@ -45,6 +53,10 @@ public:
     void push_back(double d);
 
 };
+
+
+int Vector::capacity() const { return space; }
+
 
 Vector::Vector(int s)
     : sz{s}, elem {new double [s]}
@@ -81,6 +93,32 @@ Vector& Vector::operator=(const Vector& a)
     return *this; // returns the reference on itself
 }
 
+Vector::Vector& operator=(const Vector&& a)
+    //almost like copying constructor
+    //but we have to handle with old elements
+{
+    if (*this = &a) return *this; //self-initializing
+    if (a.sz <= space) {
+        for (int i=0; i<a.sz; ++i)
+        {
+            elem[i] = a.elem[i];
+        }
+        sz = a.sz;
+        return *this;
+    }
+
+    double *p = new double[a.sz];
+    for (int i=0; i<a.sz; ++i)
+    {
+        p[i] = a.elem[i];
+    }
+    delete[] elem;
+    space = sz = a.sz;
+    elem = p;
+
+    return *this;
+}
+
 void Vector::reserve(int newalloc)
 {
     if(newalloc <= space) return; // Size never decreases
@@ -98,13 +136,13 @@ void Vector::push_back(double d)
     // increases the size of th vector by 1
     // initializes new element with value of d
 {
-    if (space == 0) // if reserved space equals to 0
-    {               // then reserve extra 8 bytes
+    if (space == 0)
+    {
         reserve(8);
-    } else if (sz == space) { // if size of the vector equals to space
-        reserve(2*space);     // then reserve two times more space 
+    } else if (sz == space) {
+        reserve(2*space);
     }
-    elem[sz] = d;         // the last element of the initial vector now
-    ++sz;                 // should equal to desired value passedd as argument
+    elem[sz] = d;
+    ++sz;
 }
 
