@@ -1,7 +1,6 @@
 // Vector class implementation
 
 #include <algorithm>
-#include <initializer_list>
 
 using namespace std;
 
