@@ -28,7 +28,7 @@ public:
     double get(int n) const { return elem[n]; } // To derive certain
                                                 //element of the vector
 
-    int capacity() const { return space; }
+   // int capacity() const { return space; }
 
     void set(int n, double v) { elem[n]=v; } // Initialize some element
                                         // of the vector with certain value
