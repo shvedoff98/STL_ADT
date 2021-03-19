@@ -1,6 +1,7 @@
 // Vector class implementation
 
 #include <algorithm>
+#include <initializer_list>
 
 using namespace std;
 
@@ -14,6 +15,8 @@ public:
     Vector(const Vector&); // Constructor by copying 
 
     Vector(int s); // Constructor with number of elements
+
+    Vector(initializer_list <double> lst);
 
     ~Vector() { delete[] elem; } // Destructor to free 
                     // the allocated memory
@@ -39,8 +42,7 @@ public:
 //--------------------------------------------------------------------------
 
     void reserve(int newalloc); // changes the size of the vector
-    //void push_back(double d);
-    //void reserve(int newalloc);
+    void push_back(double d);
 
 };
 
@@ -59,6 +61,13 @@ Vector::Vector(const Vector& arg)
     : sz{arg.sz}, elem {new double [arg.sz]}
 {
     copy(arg.elem, arg.elem+sz, elem); //std::copy();
+}
+
+Vector::Vector(initializer_list <double> lst)
+    //initializes vector with {}
+        : sz{ lst.size() }, elem{new double[sz]}
+{
+        copy (lst.begin(), lst.end(), elem);
 }
 
 Vector& Vector::operator=(const Vector& a)
@@ -85,5 +94,17 @@ void Vector::reserve(int newalloc)
     space = newalloc;
 }
 
-
+void Vector::push_back(double d)
+    // increases the size of th vector by 1
+    // initializes new element with value of d
+{
+    if (space == 0) // if reserved space equals to 0
+    {               // then reserve extra 8 bytes
+        reserve(8);
+    } else if (sz == space) { // if size of the vector equals to space
+        reserve(2*space);     // then reserve two times more space 
+    }
+    elem[sz] = d;         // the last element of the initial vector now
+    ++sz;                 // should equal to desired value passedd as argument
+}
 
