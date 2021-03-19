@@ -1,6 +1,7 @@
 // Vector class implementation
 
 #include <algorithm>
+#include <initializer_list>
 
 using namespace std;
 
@@ -26,6 +27,12 @@ public:
                                         // of the vector with certain value
 
     Vector& operator=(const Vector&);
+
+    double& operator[] (int n) { return elem[n]; } // return the reference
+
+    double& operator[] (int n); // for non-cocnstant vector
+    
+    double operator[] (int n) const; // For the constant vector
 
 };
 
