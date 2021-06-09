@@ -1,3 +1,5 @@
+// Simple priority queue data structure
+
 #include <vector>
 #include <iterator>
 #include <functional>
