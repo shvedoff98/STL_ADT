@@ -20,5 +20,5 @@ public:
 		buffer_(buf), index_(pos), last_(last) 
 		{}
     
-}
+};
 
