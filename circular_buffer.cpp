@@ -2,7 +2,6 @@
 #include <cassert>
 #include <exception>
 
-
 // Iterator
 
 
