@@ -73,5 +73,6 @@ private:
     circular_buffer<T> const & buffer_;
     size_t index_;
     bool last_;
+
 };
 
