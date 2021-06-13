@@ -1,24 +1,20 @@
-#include <iterator>
-#include <cassert>
-#include <exception>
+#pragma once
 
-// Iterator
+#include "circular_buffer.h"
 
-
-template <class T>
-class circular_buffer_iterator
+template <class T> class circular_buffer_iterator
 {
-    typedef circular_buffer_iterator	     self_type;
-    typedef T				     value_type;
-    typedef T&				     reference;
-    typedef T const&			     const_reference;
-    typedef T*                               pointer;
-    typedef std::random_access_iterator_tag  iterator_category;
-    typedef ptrdiff_t			     difference_type;
+    typedef circular_buffer_iterator	         self_type;
+    typedef T				                     value_type;
+    typedef T&				                     reference;
+    typedef T const&	        		         const_reference;
+    typedef T*                                   pointer;
+    typedef std::random_access_iterator_tag      iterator_category;
+    typedef ptrdiff_t           			     difference_type;
 
 public:
 
-    circular_buffer_iterator (circular_buffer<T> const& buf, size_t const pos, bool const last) :
+    circular_buffer_iterator(circular_buffer<T> const& buf, size_t const pos, bool const last) :
 		buffer_(buf), index_(pos), last_(last) 
 		{}
 
@@ -28,7 +24,7 @@ public:
 	{
 	    throw std::out_of_range("Iterator cannot be incremented past the end of range.");
 	}
-	index_ = (index + 1) % buffer_.data_.size();
+	index_ = (index_ + 1) % buffer_.data_.size();
 	last_ = index_ == buffer_.next_pos();
 	return *this;
     }
@@ -43,7 +39,7 @@ public:
     bool operator== (self_type const& other) const
     {
 	assert (compatible(other));
-	return _index == other.index_ && last_ == other.last_;
+	return index_ == other._index && last_ == other.last_;
     }
 
     bool operator!= (self_type const& other) const
@@ -62,6 +58,7 @@ public:
     }
 
 
+
 private:
 
     bool compatible (self_type const& other) const
@@ -69,9 +66,8 @@ private:
 	return &buffer_ == &other.buffer_;
     }
 
-    circular_buffer<T> const & buffer_;
+    circular_buffer<T> const& buffer_;
     size_t index_;
     bool last_;
 
 };
-
