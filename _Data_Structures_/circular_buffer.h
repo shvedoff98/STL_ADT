@@ -7,11 +7,11 @@
 #include "circular_buffer_iterator.h"
 
 
-template <class C> class circular_buffer
+template <class T> class circular_buffer
 {
 
 private:
-    typedef circular_buffer_iterator<C> const_iterator;
+    typedef circular_buffer_iterator<T> const_iterator;
     circular_buffer() = delete;    
 
 public:
@@ -23,7 +23,7 @@ public:
     size_t capacity() const noexcept { return data_.size(); }
     size_t size() const noexcept { return size_; }
 
-    void push(C const item)
+    void push(T const item)
     {
         head_ = next_pos();
         data_[head_] = item;
@@ -59,7 +59,7 @@ public:
 
 private:
 
-    std::vector<C> data_;
+    std::vector<T> data_;
     size_t head_ = -1;
     size_t size_ = 0;
 
