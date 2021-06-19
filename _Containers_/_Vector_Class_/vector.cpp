@@ -14,6 +14,7 @@ template <class T> class vector
     public:
 	
 	explicit vector (size_t size);
+	virtual ~vector ();
 	vector& operator= (vector& other);
 	T& operator[] (size_t pos);
 	T& at (size_t pos);
@@ -21,9 +22,37 @@ template <class T> class vector
 	size_t size () const noexcept { return sz; }
 	size_t capacity () const noexcept { return capacity_; }
 	void push_back (T&& elem);
+	void pop_back ();
+	void clear();
 	void print ();
+	void resize (size_t val);
 
 };
+
+template <class T>
+void vector<T>::resize(size_t val) 
+{
+    T* p = new T[val];
+    std::copy (arr, arr+val, p);
+    arr = p;
+    sz = val;
+    capacity_ = 2*sz;
+}
+
+template <class T>
+vector<T>::~vector() { delete[] arr; }
+
+template <class T>
+void vector<T>::clear ()
+{
+    sz = 0;
+}
+
+template <class T>
+void vector<T>::pop_back()
+{
+    --sz;
+}
 
 
 template <class T>
@@ -120,8 +149,8 @@ int main(int, char**)
 	}
     }
 
-
-    
+    vec.print();
+    vec.resize(5);
     vec.print();
 
     exit(EXIT_SUCCESS);
